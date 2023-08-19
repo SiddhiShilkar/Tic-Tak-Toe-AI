@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tic-Tac-Toe AI</title>
+  <style>
+   body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    .menu {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .menu button {
+      font-size: 16px;
+      padding: 8px 16px;
+      border: none;
+      background-color: #3498db;
+      color: white;
+      cursor: pointer;
+    }
+
+    .menu button:disabled {
+      background-color: #95a5a6;
+      cursor: not-allowed;
+    }
+
+    #board {
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+      gap: 2px;
+    }
+
+    .cell {
+      width: 100px;
+      height: 100px;
+      font-size: 36px;
+      text-align: center;
+      vertical-align: middle;
+      border: 2px solid #ccc;
+      background-color: #eee;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .cell:hover {
+      background-color: #f0f0f0;
+    }
+
+    .cell.X {
+      color: #e74c3c;
+    }
+
+    .cell.O {
+      color: #2ecc71;
+    }
+
+    #restartButton {
+      margin-top: 20px;
+      font-size: 16px;
+      padding: 8px 16px;
+      border: none;
+      background-color: #e74c3c;
+      color: white;
+      cursor: pointer;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Tic-Tac-Toe AI</h1>
+  <div class="menu">
+    <button id="playHumanButton">Play against Human</button>
+    <button id="playAIButton">Play against AI</button>
+  </div>
+  <div class="board" id="board"></div>
+  <button id="restartButton" style="display: none;">Restart Game</button>
+
+  <script>
+    const board = document.getElementById('board');
+    const restartButton = document.getElementById('restartButton');
+    const playHumanButton = document.getElementById('playHumanButton');
+    const playAIButton = document.getElementById('playAIButton');
+    const cells = [];
+
+    let currentPlayer = '';
+    let humanPlayer = '';
+    let aiPlayer = '';
+    let againstAI = false;
+
+    playHumanButton.addEventListener('click', () => startGame(false));
+    playAIButton.addEventListener('click', () => startGame(true));
+    restartButton.addEventListener('click', restartGame);
+
+    function startGame(isAI) {
+      againstAI = isAI;
+      currentPlayer = 'X';
+      humanPlayer = 'X';
+      aiPlayer = 'O';
+
+      if (againstAI) {
+        const choice = confirm('Do you want to play as X?');
+        humanPlayer = choice ? 'X' : 'O';
+        aiPlayer = choice ? 'O' : 'X';
+      }
+
+      playHumanButton.disabled = true;
+      playAIButton.disabled = true;
+      restartButton.style.display = 'none';
+
+      // Create the game board
+      board.innerHTML = '';
+      for (let i = 0; i < 9; i++) {
+        const cell = document.createElement('div');
+        cell.classList.add('cell');
+        cell.addEventListener('click', () => makeMove(i));
+        cells.push(cell);
+        board.appendChild(cell);
+      }
+
+      // If AI is starting, make the first move
+      if (againstAI && currentPlayer === aiPlayer) {
+        makeAIMove();
+      }
+    }
+
+    function restartGame() {
+      startGame(againstAI);
+    }
+
+    function makeMove(index) {
+      if (!cells[index].textContent) {
+        cells[index].textContent = currentPlayer;
+        cells[index].classList.add(currentPlayer.toLowerCase());
+
+        if (checkWin(currentPlayer)) {
+          endGame(currentPlayer + ' wins!');
+        } else if (isBoardFull()) {
+          endGame("It's a draw!");
+        } else {
+          currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+
+          if (againstAI && currentPlayer === aiPlayer) {
+            makeAIMove();
+          }
+        }
+      }
+    }
+
+    function makeAIMove() {
+      const bestMove = findBestMove();
+      setTimeout(() => makeMove(bestMove), 500); // Delay for a better user experience
+    }
+
+    function findBestMove() {
+      // Placeholder for the Minimax algorithm
+      // Implement Minimax algorithm with proper evaluation and alpha-beta pruning for a strong AI
+      // This is a basic example and doesn't provide an unbeatable AI
+      for (let i = 0; i < cells.length; i++) {
+        if (!cells[i].textContent) {
+          return i;
+        }
+      }
+    }
+
+    function checkWin(player) {
+      const winningCombos = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8],
+        [0, 3, 6], [1, 4, 7], [2, 5, 8],
+        [0, 4, 8], [2, 4, 6]
+      ];
+
+      return winningCombos.some(combo => {
+        return combo.every(index => cells[index].textContent === player);
+      });
+    }
+
+    function isBoardFull() {
+      return cells.every(cell => cell.textContent);
+    }
+
+    function endGame(message) {
+      setTimeout(() => {
+        alert(message);
+        restartButton.style.display = 'block';
+        playHumanButton.disabled = false;
+        playAIButton.disabled = false;
+      }, 300); // Delay before showing the alert
+    }
+  </script>
+</body>
+</html>
