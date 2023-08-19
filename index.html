@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tic-Tac-Toe AI</title>
+  <title>Tic-Tac-Toe </title>
   <style>
    body {
       font-family: Arial, sans-serif;
@@ -83,7 +83,7 @@
   </style>
 </head>
 <body>
-  <h1>Tic-Tac-Toe AI</h1>
+  <h1>Tic-Tac-Toe</h1>
   <div class="menu">
     <button id="playHumanButton">Play against Human</button>
     <button id="playAIButton">Play against AI</button>
@@ -123,7 +123,6 @@
       playAIButton.disabled = true;
       restartButton.style.display = 'none';
 
-      // Create the game board
       board.innerHTML = '';
       for (let i = 0; i < 9; i++) {
         const cell = document.createElement('div');
@@ -132,8 +131,6 @@
         cells.push(cell);
         board.appendChild(cell);
       }
-
-      // If AI is starting, make the first move
       if (againstAI && currentPlayer === aiPlayer) {
         makeAIMove();
       }
@@ -168,9 +165,6 @@
     }
 
     function findBestMove() {
-      // Placeholder for the Minimax algorithm
-      // Implement Minimax algorithm with proper evaluation and alpha-beta pruning for a strong AI
-      // This is a basic example and doesn't provide an unbeatable AI
       for (let i = 0; i < cells.length; i++) {
         if (!cells[i].textContent) {
           return i;
@@ -200,7 +194,7 @@
         restartButton.style.display = 'block';
         playHumanButton.disabled = false;
         playAIButton.disabled = false;
-      }, 300); // Delay before showing the alert
+      }, 300);
     }
   </script>
 </body>
